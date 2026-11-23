@@ -1,1 +1,13 @@
-
+{
+"name": "Kali Linux Desktop",
+"image": "kalilinux/kali-rolling",
+"forwardPorts": [6080],
+"portsAttributes": {
+"6080": {
+"label": "Kali Desktop",
+"visibility": "private"
+}
+},
+"postCreateCommand": "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y xfce4 xfce4-terminal tigervnc-standalone-server novnc dbus-x11",
+"postStartCommand": "mkdir -p /root/.vnc && printf '#!/bin/sh\nstartxfce4\n' > /root/.vnc/xstartup && chmod +x /root/.vnc/xstartup && (vncserver :1 -localhost yes -SecurityTypes None -geometry 1280x800 -depth 24 || true) && (websockify --web=/usr/share/novnc 0.0.0.0:6080 127.0.0.1:5901 >/tmp/novnc.log 2>&1 &)"
+}
